@@ -7,7 +7,7 @@ def save_html(html, file_name):
 
 base_url = 'https://teslamotorsclub.com/tmc/threads/australian-model-3-waiting-room.248573/page-'
 
-last_page_num = 2
+last_page_num = 798
 
 for i in range(1,last_page_num+1):
     page_num = i
@@ -15,5 +15,7 @@ for i in range(1,last_page_num+1):
     content = requests.get(url).content
 
     save_html(content, page_num)
+
+    print('saved page: ' + str(page_num)) 
 
     time.sleep(1)
