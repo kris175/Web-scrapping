@@ -4,6 +4,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn import ensemble, metrics
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 class MachineLearning:
 
@@ -28,24 +30,38 @@ class MachineLearning:
         x_test_GBC = vectorizer.transform(x_test_GBC)
 
         # Train the model
-        model = ensemble.GradientBoostingClassifier(learning_rate=0.1,                                            
+        self.model = ensemble.GradientBoostingClassifier(learning_rate=0.1,                                            
                                             n_estimators=2000,
                                             max_depth=9,
                                             min_samples_split=6,
                                             min_samples_leaf=2,
                                             max_features=8,
                                             subsample=0.9)
-        model.fit(X_train_GBC, self.y_train)
+        self.model.fit(X_train_GBC, self.y_train)
 
 
         # Evaluate the model
-        predicted_prob = model.predict_proba(x_test_GBC)[:,1]
-        predicted = model.predict(x_test_GBC)
+        predicted_prob = self.model.predict_proba(x_test_GBC)[:,1]
+        predicted = self.model.predict(x_test_GBC)
 
         accuracy = metrics.accuracy_score(predicted, self.y_test)
         print("Test accuracy: ", accuracy)
         print(metrics.classification_report(self.y_test, predicted, target_names=["0", "1"]))
         print("Test F-scoare: ", metrics.f1_score(self.y_test, predicted))
+
+
+        # Plot confusion matrix
+        conf_matrix = metrics.confusion_matrix(self.y_test, predicted)
+
+        fig, ax = plt.subplots()
+        sns.heatmap(conf_matrix, cbar=False, cmap='Reds', annot=True, fmt='d')
+        ax.set(xlabel="Predicted Value", ylabel="True Value", title="Confusion Matrix")
+        ax.set_yticklabels(labels=['0', '1'], rotation=0)
+
+        plt.show()
+
+    def predict(self):
+        pass
         
 
 if __name__ == "__main__":
